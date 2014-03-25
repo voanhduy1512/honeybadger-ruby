@@ -1,3 +1,10 @@
+## Honeybadger 2.0 (unreleased) ##
+
+* Stop sending notifications when `config.consider_all_requests_local`
+  is enabled. [See commit for details](https://github.com/honeybadger-io/honeybadger-ruby/commit/eb5d593c8a8dd0257223a474fa82d7b9e2bfc048).
+
+  *Joshua Wood*
+
 ## Honeybadger 1.12.0 (unreleased) ##
 
 * Support ruby 2.1 with Exception#cause
