@@ -11,6 +11,8 @@ namespace :honeybadger do
                    end
     Rails.logger.level = Logger::INFO
 
+    Rails.application.config.consider_all_requests_local = false
+
     Honeybadger.configure(true) do |config|
       config.logger = Rails.logger
       config.debug = true

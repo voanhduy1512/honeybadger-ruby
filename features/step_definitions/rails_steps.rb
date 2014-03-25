@@ -90,6 +90,14 @@ Then /^I should receive (.+) Honeybadger notifications?$/ do |number|
   step %(the output should contain "123456789")
 end
 
+Then /^I should not receive a Honeybadger notification$/  do
+  steps %(
+    Then the output should not contain "[Honeybadger] Success"
+    Then the output should not contain "[Honeybadger] Response from Honeybadger"
+    Then the output should not contain "[Honeybadger] Notice"
+  )
+end
+
 Then /^the request\s?(url|component|action|params|session|cgi_data|context)? should( not)? contain "([^\"]*)"$/ do |key, negate, expected|
   notice = all_output.match(/Notice: (\{.+\})/) ? JSON.parse(Regexp.last_match(1)) : {}
   hash = key ? notice['request'][key.strip] : notice['request']
@@ -115,8 +123,8 @@ When /^I define a( metal)? response for "([^\"]*)":$/ do |metal, controller_and_
   end
 end
 
-When /^I perform a request to "([^\"]*)"$/ do |uri|
-  perform_request(uri)
+When /^I perform a request to "([^\"]*)"(?: in the "(.+?)" environment)?$/ do |uri, environment|
+  perform_request(uri, environment || 'production')
 end
 
 When /^I configure the user informer/ do

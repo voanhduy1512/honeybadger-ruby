@@ -303,6 +303,17 @@ Feature: Install the Gem in a Rails application
     """
     config.api_key = 'myapikey'
     config.logger = Logger.new(STDOUT)
+    """
+    And I perform a request to "http://example.com:123/this/route/does/not/exist"
+    Then the output should contain "The page you were looking for doesn't exist."
+    And I should not receive a Honeybadger notification
+
+  Scenario: Enable reporting 404s
+    When I configure my application to require Honeybadger
+    And I configure Honeybadger with:
+    """
+    config.api_key = 'myapikey'
+    config.logger = Logger.new(STDOUT)
     config.ignore_only = []
     """
     And I perform a request to "http://example.com:123/this/route/does/not/exist"

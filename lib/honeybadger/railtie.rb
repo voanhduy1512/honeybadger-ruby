@@ -3,16 +3,16 @@ require 'honeybadger/monitor'
 require 'rails'
 
 module Honeybadger
-  class Railtie < Rails::Railtie
+  class Railtie < ::Rails::Railtie
     rake_tasks do
       require 'honeybadger/rake_handler'
-      require "honeybadger/rails3_tasks"
+      require 'honeybadger/rails3_tasks'
     end
 
-    initializer "honeybadger.use_rack_middleware" do |app|
-      app.config.middleware.insert 0, "Honeybadger::UserInformer"
-      app.config.middleware.insert_after "Honeybadger::UserInformer","Honeybadger::UserFeedback"
-      app.config.middleware.insert_after "Honeybadger::UserFeedback","Honeybadger::Rack"
+    initializer 'honeybadger.use_rack_middleware' do |app|
+      app.config.middleware.insert 0, 'Honeybadger::UserInformer'
+      app.config.middleware.insert_after 'Honeybadger::UserInformer', 'Honeybadger::UserFeedback'
+      app.config.middleware.insert_after 'Honeybadger::UserFeedback', 'Honeybadger::Rack'
     end
 
     config.after_initialize do
@@ -29,19 +29,6 @@ module Honeybadger
         require 'honeybadger/rails/controller_methods'
 
         include Honeybadger::Rails::ControllerMethods
-      end
-
-      if defined?(::ActionDispatch::DebugExceptions)
-        # We should catch the exceptions in ActionDispatch::DebugExceptions in Rails 3.2.x.
-        #
-        require 'honeybadger/rails/middleware/exceptions_catcher'
-        ::ActionDispatch::DebugExceptions.send(:include,Honeybadger::Rails::Middleware::ExceptionsCatcher)
-      elsif defined?(::ActionDispatch::ShowExceptions)
-        # ActionDispatch::DebugExceptions is not defined in Rails 3.0.x and 3.1.x so
-        # catch the exceptions in ShowExceptions.
-        #
-        require 'honeybadger/rails/middleware/exceptions_catcher'
-        ::ActionDispatch::ShowExceptions.send(:include,Honeybadger::Rails::Middleware::ExceptionsCatcher)
       end
 
       Honeybadger::Dependency.inject!
