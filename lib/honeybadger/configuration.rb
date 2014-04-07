@@ -8,7 +8,8 @@ module Honeybadger
                :params_filters, :project_root, :port, :protocol, :proxy_host, :proxy_pass,
                :proxy_port, :proxy_user, :secure, :use_system_ssl_cert_chain, :framework,
                :user_information, :feedback, :rescue_rake_exceptions, :source_extract_radius,
-               :send_request_session, :debug, :fingerprint, :hostname, :metrics, :log_exception_on_send_failure].freeze
+               :send_request_session, :debug, :fingerprint, :hostname, :metrics, :log_exception_on_send_failure,
+               :traces, :trace_threshold].freeze
 
     # The API key for your project, found on the project edit form.
     attr_accessor :api_key
@@ -59,6 +60,9 @@ module Honeybadger
 
     # A list of user agents that are being ignored. The array can be appended to.
     attr_reader :ignore_user_agent
+
+    # Traces must have a duration greater than this (in ms) to be recorded
+    attr_reader :trace_threshold
 
     # A list of environments in which notifications should not be sent.
     attr_accessor :development_environments
@@ -117,6 +121,9 @@ module Honeybadger
 
     # Send metrics?
     attr_accessor :metrics
+
+    # Send traces?
+    attr_accessor :traces
 
     # Which features the API says we have
     attr_accessor :features
@@ -180,8 +187,10 @@ module Honeybadger
       @hostname                      = Socket.gethostname
       @metrics                       = true
       @features                      = { 'notices' => true }
+      @traces                        = true
       @limit                         = nil
       @feedback                      = true
+      @trace_threshold               = 2000
     end
 
     # Public: Takes a block and adds it to the list of backtrace filters. When
@@ -275,6 +284,12 @@ module Honeybadger
     #
     def metrics?
       public? && @metrics
+    end
+
+    # Public: Determines whether to send traces
+    #
+    def traces?
+      public? && @traces
     end
 
     # Public: Configure async delivery
