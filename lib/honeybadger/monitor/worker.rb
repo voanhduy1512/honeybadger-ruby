@@ -22,10 +22,15 @@ module Honeybadger
 
       def start
         @thread = MetricsThread.new do
-          until Thread.current[:should_exit] do
-            send_metrics
-            send_traces
-            sleep @delay
+          begin
+            until Thread.current[:should_exit] do
+              send_metrics
+              send_traces
+              sleep @delay
+            end
+          rescue Exception => e
+            Honeybadger.write_verbose_log("Error in MetricsThread (shutting down): #{e.class} - #{e.message}\n#{e.backtrace.join("\n\t")}", :error)
+            raise e
           end
         end
       end
