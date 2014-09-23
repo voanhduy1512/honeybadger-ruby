@@ -31,7 +31,8 @@ module Helpers
                 :open_timeout= => nil,
                 :ca_file=      => nil,
                 :verify_mode=  => nil,
-                :use_ssl=      => nil)
+                :use_ssl=      => nil,
+                :ssl_version=  => nil)
     Net::HTTP.stub(:new).and_return(http)
     http
   end

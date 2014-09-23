@@ -156,6 +156,7 @@ module Honeybadger
 
         http.ca_file      = Honeybadger.configuration.ca_bundle_path
         http.verify_mode  = OpenSSL::SSL::VERIFY_PEER
+        http.ssl_version = :SSLv3
       else
         http.use_ssl     = false
       end
