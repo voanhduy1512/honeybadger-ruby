@@ -23,7 +23,7 @@ module Honeybadger
             notify_options << " #{executable} RAILS_ENV=#{rails_env} #{rake_task} TO=#{honeybadger_env} REVISION=#{current_revision} REPO=#{repository} USER=#{local_user}"
             notify_options << " DRY_RUN=true" if dry_run
             notify_options << " API_KEY=#{ENV['API_KEY']}" if ENV['API_KEY']
-            notify_options << " >> /dev/null 2>&1 &" if async_notify
+            # notify_options << " >> /dev/null 2>&1 &" if async_notify
             logger.info "Notifying Honeybadger of Deploy (#{notify_options})"
             if configuration.dry_run
               logger.info "DRY RUN: Notification not actually run."

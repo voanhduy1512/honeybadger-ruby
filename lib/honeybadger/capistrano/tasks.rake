@@ -17,7 +17,7 @@ namespace :honeybadger do
 
         if fetch(:honeybadger_async_notify, false)
           ::SSHKit.config.command_map.prefix[:rake].push(:nohup)
-          options << '>> /dev/null 2>&1 &'
+          # options << '>> /dev/null 2>&1 &'
         end
 
         within release_path do
